@@ -13,14 +13,16 @@ public class CreateSessionFactoryListener implements ServletContextListener {
 
     public void contextDestroyed(ServletContextEvent sce)  { 
         
-    	System.out.println("CreateSessionFactoryListener#contextDestroyed() 正在執行...");
+    	System.out.println("1.CreateSessionFactoryListener#contextDestroyed()-222 正在執行...");
     	HibernateUtils.getSessionFactory().close();;
     }
 
 
     public void contextInitialized(ServletContextEvent sce)  {
-    	System.out.println("CreateSessionFactoryListener#contextInitialized() 正在執行...");
+    	System.out.println("2.CreateSessionFactoryListener#contextInitialized()-111 正在執行...");
+    	System.out.println("---------------------------------");
          HibernateUtils.getSessionFactory();
+         System.out.println("---------------------------------");
     }
 	
 }
