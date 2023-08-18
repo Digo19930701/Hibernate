@@ -1,36 +1,28 @@
 package lab01.dao.impl;
 
-import java.sql.Blob;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.List;
-import java.util.Vector;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.stereotype.Repository;
 
 import lab01.dao.MemberDao;
 import lab01.model.MemberBean;
-import utils.HibernateUtils;
 
+@Repository
 public class MemberHibernateDaoImpl implements MemberDao {
 
-	//DataSource ds = null;
+
+//    @Autowired
+	
 	SessionFactory factory;
-	public MemberHibernateDaoImpl() {
-		factory = HibernateUtils.getSessionFactory();//準備工廠
+	public MemberHibernateDaoImpl(SessionFactory factory) {
+//		factory = HibernateUtils.getSessionFactory();//準備工廠
+		this.factory = factory;
 	}
 
-	private static final String SELECT_BY_MEMBERID = "SELECT memberId, password, name, phone, birthday, registerdate, picture, weight FROM memberlab01 WHERE memberId = ?";
-
+	//private static final String SELECT_BY_MEMBERID = "SELECT memberId, password, name, phone, birthday, registerdate, picture, weight FROM memberlab01 WHERE memberId = ?";
+	
 	public MemberBean findByMemberId(String id) {
 		MemberBean result = null;
 		String hql = "FROM MemberEntity WHERE memberId = :mid";
@@ -68,7 +60,8 @@ public class MemberHibernateDaoImpl implements MemberDao {
 	public void deleteByMemberId(String memberId) {
 		Session session = factory.getCurrentSession();
 		MemberBean bean = findByMemberId(memberId);
-		session.delete(memberId);
+		session.delete(bean);
+		return;
 		
 	}
 
@@ -78,7 +71,7 @@ public class MemberHibernateDaoImpl implements MemberDao {
 		return (memberBean != null);
 	}
 
-	private static final String SELECT_BY_ID = "SELECT id, memberId, password, name, phone, birthday, registerdate, picture, weight FROM memberlab01 WHERE id = ?";
+	//private static final String SELECT_BY_ID = "SELECT id, memberId, password, name, phone, birthday, registerdate, picture, weight FROM memberlab01 WHERE id = ?";
 
 	@Override
 	public MemberBean findById(Integer id) {
@@ -105,7 +98,10 @@ public class MemberHibernateDaoImpl implements MemberDao {
 	@Override
 	public void update(MemberBean memberBean) {
 		Session session = factory.getCurrentSession();
-		session.saveOrUpdate(memberBean);
+		MemberBean temp = findById(memberBean.getId());
+		memberBean.setRegisterDate(temp.getRegisterDate());
+		//session.saveOrUpdate(memberBean);
+		session.merge(memberBean);
 	}
 
 	

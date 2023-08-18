@@ -68,5 +68,10 @@
 	</dependency>
 
 
+		<dependency>
+			<groupId>exercise.spring</groupId>
+			<artifactId>SpringExampleMM22</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 </project>

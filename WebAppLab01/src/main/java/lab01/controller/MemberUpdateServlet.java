@@ -12,10 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
 import lab01.SystemUtils;
 import lab01.model.MemberBean;
 import lab01.service.MemberService;
-import lab01.service.impl.MemberServiceImpl;
+
 
 @WebServlet("/lab01/updateMember.do")
 public class MemberUpdateServlet extends HttpServlet {
@@ -29,7 +32,10 @@ public class MemberUpdateServlet extends HttpServlet {
 		String modify = request.getParameter("finalDecision");
 		String sid = request.getParameter("id");
 		int id = Integer.parseInt(sid);
-		MemberService ms = new MemberServiceImpl();
+//		MemberService ms = new MemberHibernateServiceImpl();
+		WebApplicationContext ctx = 
+				WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+		MemberService ms = ctx.getBean(MemberService.class);
 		
 		if(modify.equalsIgnoreCase("DELETE")){
 			ms.deleteById(id);

@@ -10,16 +10,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
 import lab01.model.MemberBean;
 import lab01.service.MemberService;
-import lab01.service.impl.MemberServiceImpl;
 
 @WebServlet("/lab01/queryMember.do")
 public class QueryAllMemberServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		MemberService ms = new MemberServiceImpl();
+//		MemberService ms = new MemberHibernateServiceImpl();
+		WebApplicationContext ctx = 
+				WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+		MemberService ms = ctx.getBean(MemberService.class);
 		List <MemberBean>list = ms.findAll();
 		request.setAttribute("allMembers", list);
 		RequestDispatcher rd = request.getRequestDispatcher("/lab01/showMembers.jsp");
